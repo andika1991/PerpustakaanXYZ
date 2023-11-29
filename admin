@@ -1,0 +1,58 @@
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+class Admin {
+    List<AnggotaPerpustakaan> anggotaList;
+    List<Buku> bukuList;
+    List<AnggotaPerpustakaan> daftarAnggota = new ArrayList<>();
+    List<Buku> daftarBuku = new ArrayList<>();
+    List<TransaksiPeminjaman> daftarTransaksiPeminjaman;
+
+    public Admin() {
+        this.anggotaList = new ArrayList<>();
+        this.bukuList = new ArrayList<>();
+        this.daftarTransaksiPeminjaman = new ArrayList<>();
+    }
+
+    public void tambahAnggota(String nama, int nomorAnggota,String alamat,String password) {
+       AnggotaPerpustakaan anggotaBaru = new AnggotaPerpustakaan ( nama, nomorAnggota, alamat, password);
+        anggotaList.add(anggotaBaru);
+        System.out.println("Anggota baru berhasil ditambahkan: " + anggotaBaru);
+    }
+
+    public void tambahBuku(String judul,String pengarang,int nomorISBN,boolean statusKetersediaan) {
+        Buku bukuBaru = new Buku (judul,  pengarang,  nomorISBN,statusKetersediaan);
+        bukuList.add(bukuBaru);
+        System.out.println("Buku baru berhasil ditambahkan: " + bukuBaru);
+    }
+
+    public void hapusAnggota(int nomorAnggota) {
+        AnggotaPerpustakaan anggotaHapus = null;
+
+        for (AnggotaPerpustakaan anggota : anggotaList) {
+            if (anggota.nomorAnggota == nomorAnggota) {
+                anggotaHapus = anggota;
+                break;
+            }
+        }
+
+        if (anggotaHapus != null) {
+            anggotaList.remove(anggotaHapus);
+            System.out.println("Anggota berhasil dihapus: " + anggotaHapus);
+        } else {
+            System.out.println("Anggota tidak ditemukan.");
+        }
+    }
+    
+
+    public void generateLaporan() {
+        int jumlahTransaksiPeminjaman = daftarTransaksiPeminjaman.size();
+
+        System.out.println("Laporan Jumlah Transaksi Peminjaman: " + jumlahTransaksiPeminjaman);
+    }
+}

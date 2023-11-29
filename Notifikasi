@@ -1,0 +1,43 @@
+import java.util.Date;
+
+class Notifikasi {
+    private String jenis;
+    private String penerima;
+    private String isi;
+
+    public Notifikasi(String jenis, String penerima, String isi) {
+        this.jenis = jenis;
+        this.penerima = penerima;
+        this.isi = isi;
+    }
+
+    public String getJenis() {
+        return jenis;
+    }
+
+    public void setJenis(String jenis) {
+        this.jenis = jenis;
+    }
+
+    public String getPenerima() {
+        return penerima;
+    }
+
+    public void setPenerima(String penerima) {
+        this.penerima = penerima;
+    }
+
+    public String getIsi() {
+        return isi;
+    }
+
+    public void setIsi(String isi) {
+        this.isi = isi;
+    }
+
+    public void kirimNotifikasi() {
+        System.out.println("Notifikasi dikirim ke: " + penerima);
+        System.out.println("Jenis: " + jenis);
+        System.out.println("Isi: " + isi);
+    }
+}

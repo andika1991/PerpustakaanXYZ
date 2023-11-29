@@ -1,0 +1,107 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+public class MainAdminPerpustakaan {
+    public static void main(String[] args) {
+        
+          Scanner scanner = new Scanner(System.in);
+        
+        // Menu Login Admin
+        System.out.println("=== Login Admin ===");
+        System.out.print("Masukkan username admin: ");
+        String usernameAdmin = scanner.nextLine();
+        System.out.print("Masukkan password admin: ");
+        String passwordAdmin = scanner.nextLine();
+        
+       
+        if (verifikasiLoginAdmin(usernameAdmin, passwordAdmin)) {
+            
+            System.out.println("Login admin berhasil. Selamat datang, " + usernameAdmin + "!");
+            
+           
+            menuAdmin();
+        } else {
+            
+            System.out.println("Login admin gagal. Program akan keluar.");
+        }
+    }
+
+   
+    private static boolean verifikasiLoginAdmin(String username, String password) {
+        
+        return "admin".equals(username) && "admin123".equals(password);
+    }
+
+   
+    private static void menuAdmin() {
+        Admin admin = new Admin();
+        Scanner scanner = new Scanner(System.in);
+
+        int pilihan;
+
+      do {
+            System.out.println("\nMenu Admin:");
+            System.out.println("1. Tambah Anggota");
+            System.out.println("2. Tambah Buku");
+            System.out.println("3. Hapus Anggota");
+            System.out.println("4. Generate Laporan");
+            System.out.println("5. Keluar");
+            System.out.print("Pilih menu (1-5): ");
+            pilihan = scanner.nextInt();
+            scanner.nextLine(); // Membersihkan newline
+
+            switch (pilihan) {
+                case 1:
+                    System.out.print("Masukkan nama anggota: ");
+                    String namaAnggota = scanner.nextLine();
+                    System.out.print("Masukkan nomor anggota: ");
+                    int nomorAnggota = scanner.nextInt();
+                    System.out.print("Masukkan alamat anggota: ");
+                    String alamat = scanner.nextLine();
+                    System.out.print("Masukkan pasword: ");
+                    String password  = scanner.nextLine();
+                    scanner.nextLine(); // Membersihkan newline
+                    admin.tambahAnggota(namaAnggota, nomorAnggota, alamat, password );
+                    break;
+
+                case 2:
+                    System.out.print("Masukkan judul buku: ");
+                    String judul = scanner.nextLine();
+                    System.out.print("Masukkan judul buku: ");
+                    String pengarang = scanner.nextLine();
+                    System.out.print("Masukkan judul buku: ");
+                    int nomorISBN = scanner.nextInt();
+                    System.out.print("Masukkan judul buku: ");
+                    System.out.print("Apakah buku tersedia? (true/false): ");
+                    boolean statusKetersediaan = scanner.nextBoolean();
+                  
+                    
+                    admin.tambahBuku ( judul, pengarang,nomorISBN,statusKetersediaan);
+                    break;
+
+                case 3:
+                    System.out.print("Masukkan nomor anggota yang ingin dihapus: ");
+                    int nomorAnggotaHapus = scanner.nextInt();
+                    scanner.nextLine(); // Membersihkan newline
+                    admin.hapusAnggota(nomorAnggotaHapus);
+                    break;
+
+                case 4:
+                    admin.generateLaporan();
+                    break;
+
+                case 5:
+                    System.out.println("Keluar dari Menu Admin. Sampai jumpa!");
+                    break;
+
+                default:
+                    System.out.println("Pilihan tidak valid.");
+                    break;
+            }
+        } while (pilihan != 5);
+    }
+}

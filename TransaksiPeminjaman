@@ -1,0 +1,51 @@
+import java.util.Date;
+import java.util.List;
+
+
+class TransaksiPeminjaman {
+    String anggota;
+    String buku;
+    Date tanggalPeminjaman; // Tambahkan atribut tanggalPeminjaman
+    int durasi;
+    String status;
+
+    // Tambahkan konstruktor untuk inisialisasi atribut
+    public TransaksiPeminjaman(String anggota, String buku, int durasi) {
+        this.anggota = anggota;
+        this.buku = buku;
+        this.tanggalPeminjaman = new Date();
+        this.durasi = durasi;
+        this.status = "Belum Kembali";
+    }
+    public String getAnggota() {
+        return anggota;
+    }
+
+    public String getBuku() {
+        return buku;
+    }
+
+    public Date getTanggalPeminjaman() {
+        return tanggalPeminjaman;
+    }
+
+    public int getDurasi() {
+        return durasi;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    
+    public void kirimNotifikasi(List<Notifikasi> notifikasiList) {
+        
+        Date tglKembali = new Date(this.tanggalPeminjaman.getTime() + this.durasi * 24 * 60 * 60 * 1000);
+        Date duaHariSebelumKembali = new Date(tglKembali.getTime() - 2 * 24 * 60 * 60 * 1000);
+
+        if (new Date().after(duaHariSebelumKembali) && new Date().before(tglKembali)) {
+            notifikasiList.add(new Notifikasi("Peminjaman akan jatuh tempo", this.anggota, "Harap segera mengembalikan buku: " + this.buku));
+        }
+}
+}
+

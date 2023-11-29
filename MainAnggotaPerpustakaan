@@ -1,0 +1,179 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+public class PerpustakaanApp {
+    public static void main(String[] args) {
+        
+        Scanner scanner = new Scanner(System.in);
+         List<AnggotaPerpustakaan> anggotaList = new ArrayList<>();
+        List<Buku> bukuList = new ArrayList<>();
+        List<Notifikasi> notifikasiList = new ArrayList<>();
+        List<TransaksiPeminjaman> daftarTransaksi = new ArrayList<>();
+        
+
+
+         
+      AnggotaPerpustakaan anggota1 = new AnggotaPerpustakaan("Andika Fikri Azhari", 1, "Pringsewu", "2257051005");
+      AnggotaPerpustakaan anggota2 = new AnggotaPerpustakaan("Ibnu Muhtar", 2, "TulangBawang", "2217051140");
+       AnggotaPerpustakaan anggota3 = new AnggotaPerpustakaan("Muhamad Rofiq", 3, "Lahat", "2217051098");
+       
+        anggotaList.add(anggota1);
+        anggotaList.add(anggota2);
+        anggotaList.add(anggota3);
+        Buku buku1 = new Buku("Java Programming", "Ahmad zikri", 123456789, true);
+        Buku buku2 = new Buku("Pemrograman Dasar C++", "M Yunus", 28394993, true);
+        Buku buku3 = new Buku("Pemrograman Web", "Dr.Hambali Munir", 3949953, true);
+        Buku buku4 = new Buku("Jago Blender", "Andi Mustofa", 3223,true);
+        Buku buku5 = new Buku("Bahasa Otomata", "John Ali", 1244364, true);
+        bukuList.add(buku1);
+bukuList.add(buku2);
+bukuList.add(buku3);
+bukuList.add(buku4);
+bukuList.add(buku5);
+
+        // Menu Login
+        System.out.print("Masukkan nomor anggota: ");
+        int nomorAnggota = scanner.nextInt();
+        AnggotaPerpustakaan anggota = null;
+
+        for (AnggotaPerpustakaan a : anggotaList) {
+            if (a.getNomorAnggota() == nomorAnggota) {
+                anggota = a;
+                break;
+            }
+        }
+
+        scanner.nextLine(); 
+
+        System.out.print("Masukkan password anggota: ");
+        String passwordAnggota = scanner.nextLine();
+
+        if (anggota != null && anggota.login(passwordAnggota)) {
+            int pilihanMenu;
+                do {
+                    // Menu Utama
+                    System.out.println("\nMenu Utama:");
+                    System.out.println("1. Cari Ketersediaan Buku");
+                    System.out.println("2. Peminjaman Buku");
+                    System.out.println("3. Pengembalian Buku");
+                    System.out.println("4. Riwayat Peminjaman");
+                    System.out.println("5. Cek Pesan Notifikasi");
+                    System.out.println("6. Exit");
+
+                    System.out.print("Pilih menu (1-6): ");
+                    pilihanMenu = scanner.nextInt();
+                    scanner.nextLine(); // Membersihkan newline
+
+                    switch (pilihanMenu) {
+                        case 1:
+                            // Cari Ketersediaan Buku
+                              System.out.print("Masukkan judul buku yang ingin dicari: ");
+    String judulCari = scanner.nextLine();
+    Buku bukuCari = Buku.cariBukuByJudul(bukuList, judulCari);
+
+    if (bukuCari != null && bukuCari.isStatusKetersediaan()) {
+        System.out.println("Buku tersedia. Detail buku:");
+        System.out.println("Judul: " + bukuCari.getJudul());
+        System.out.println("Pengarang: " + bukuCari.getPengarang());
+        System.out.println("Nomor ISBN: " + bukuCari.getNomorISBN());
+    } else {
+        System.out.println("Buku tidak tersedia atau tidak ditemukan.");
+    }
+                        break;
+
+                        case 2:
+                            // Peminjaman Buku
+                            System.out.print("Masukkan judul buku yang ingin dipinjam: ");
+                            String judulPinjam = scanner.nextLine();
+                            Buku bukuPinjam = Buku.cariBukuByJudul(bukuList, judulPinjam);
+
+                            if (bukuPinjam != null && bukuPinjam.isStatusKetersediaan()) {
+                                System.out.print("Masukkan tanggal peminjaman (dd-MM-yyyy): ");
+                                String tanggalPeminjamanStr = scanner.nextLine();
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+                                try {
+                                    Date tanggalPeminjaman = dateFormat.parse(tanggalPeminjamanStr);
+
+                                    System.out.print("Masukkan durasi peminjaman (dalam hari): ");
+                                    int durasiPeminjaman = scanner.nextInt();
+
+                                    anggota.pinjamBuku(bukuPinjam);
+                                    bukuPinjam.setStatusKetersediaan(false);
+                                    TransaksiPeminjaman transaksiPeminjaman = new TransaksiPeminjaman(anggota.getNama(), bukuPinjam.getJudul(), durasiPeminjaman);
+                                    daftarTransaksi.add(transaksiPeminjaman);
+
+                                    // Notifikasi jika peminjaman tersisa 2 hari
+                                    Date tglJatuhTempo = new Date(tanggalPeminjaman.getTime() + durasiPeminjaman * 24 * 60 * 60 * 1000);
+                                    Date duaHariSebelumJatuhTempo = new Date(tglJatuhTempo.getTime() - 2 * 24 * 60 * 60 * 1000);
+
+                                    if (new Date().before(duaHariSebelumJatuhTempo)) {
+                                        notifikasiList.add(new Notifikasi("Peminjaman tersisa 2 hari", anggota.getNama(), "Harap segera mengembalikan buku: " + bukuPinjam.getJudul()));
+                                    }
+
+                                    System.out.println("Peminjaman berhasil.");
+                                } catch (ParseException e) {
+                                    System.out.println("Format tanggal salah. Gunakan format dd-MM-yyyy.");
+                                }
+                            } else {
+                                System.out.println("Buku tidak tersedia atau tidak ditemukan.");
+                            }
+                            break;
+
+                        case 3:
+                            // Pengembalian Buku
+                            System.out.print("Masukkan judul buku yang ingin dikembalikan: ");
+                            String judulKembali = scanner.nextLine();
+                            Buku bukuKembali = Buku.cariBukuByJudul(bukuList, judulKembali);
+
+                            if (bukuKembali != null && !bukuKembali.isStatusKetersediaan()) {
+                                anggota.kembalikanBuku(bukuKembali);
+                                bukuKembali.setStatusKetersediaan(true);
+                                TransaksiPengembalian transaksiPengembalian = new TransaksiPengembalian(anggota.getNama(), bukuKembali.getJudul());
+                                
+                                System.out.println("Pengembalian berhasil.");
+                            } else {
+                                System.out.println("Buku tidak dapat dikembalikan atau tidak ditemukan.");
+                            }
+                            break;
+
+                        case 4:
+                            // Riwayat Peminjaman
+                            System.out.println("\nRiwayat Peminjaman:");
+                            for (TransaksiPeminjaman transaksi : daftarTransaksi) {
+                                System.out.println("Anggota: " + transaksi.getAnggota());
+                                System.out.println("Buku: " + transaksi.getBuku());
+                                System.out.println("Tanggal Peminjaman: " + transaksi.getTanggalPeminjaman());
+                                System.out.println("Durasi Peminjaman: " + transaksi.getDurasi() + " hari");
+                                System.out.println("Status: " + transaksi.getStatus() );
+                                System.out.println("---------------------------");
+                            }
+                            break;
+
+                        case 5:
+                            // Cek Pesan Notifikasi
+                            System.out.println("\nDaftar Notifikasi:");
+                            for (Notifikasi notifikasi : notifikasiList) {
+                                notifikasi.kirimNotifikasi();
+                            }
+                            break;
+
+                        case 6:
+                            System.out.println("Terima kasih. Sampai jumpa!");
+                            break;
+
+                        default:
+                            System.out.println("Pilihan menu tidak valid.");
+                            break;
+                    }
+               }  while (pilihanMenu != 6);
+       } else {
+            System.out.println("Login anggota gagal. Password salah.");
+        }
+    
+    }
+}

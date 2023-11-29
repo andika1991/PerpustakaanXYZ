@@ -1,0 +1,57 @@
+import java.util.Date;
+
+class TransaksiPengembalian {
+    String anggota;
+    String buku;
+    String status;
+    Date tanggalPengembalian;
+
+    // Konstruktor untuk inisialisasi objek TransaksiPengembalian
+    public TransaksiPengembalian(String anggota, String buku) {
+        this.anggota = anggota;
+        this.buku = buku;
+        this.tanggalPengembalian = new Date();
+        this.status = "Dikembalikan";
+    }
+
+    public String getAnggota() {
+        return anggota;
+    }
+
+    public void setAnggota(String anggota) {
+        this.anggota = anggota;
+    }
+
+    public String getBuku() {
+        return buku;
+    }
+
+    public void setBuku(String buku) {
+        this.buku = buku;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getTanggalPengembalian() {
+        return tanggalPengembalian;
+    }
+
+    public void setTanggalPengembalian(Date tanggalPengembalian) {
+        this.tanggalPengembalian = tanggalPengembalian;
+    }
+
+   
+    public void displayInfo() {
+        System.out.println("Transaksi Pengembalian");
+        System.out.println("Anggota: " + anggota);
+        System.out.println("Buku: " + buku);
+        System.out.println("Tanggal Pengembalian: " + tanggalPengembalian);
+        System.out.println("Status: " + status);
+    }
+}

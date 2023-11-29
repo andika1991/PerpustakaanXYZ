@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class MainAdminPerpustakaan {
+public class PerpustakaanApp {
     public static void main(String[] args) {
         
           Scanner scanner = new Scanner(System.in);
@@ -71,11 +71,11 @@ public class MainAdminPerpustakaan {
                 case 2:
                     System.out.print("Masukkan judul buku: ");
                     String judul = scanner.nextLine();
-                    System.out.print("Masukkan judul buku: ");
+                    System.out.print("Masukkan Pengarang: ");
                     String pengarang = scanner.nextLine();
-                    System.out.print("Masukkan judul buku: ");
+                    System.out.print("Masukkan NomorISBN: ");
                     int nomorISBN = scanner.nextInt();
-                    System.out.print("Masukkan judul buku: ");
+                 
                     System.out.print("Apakah buku tersedia? (true/false): ");
                     boolean statusKetersediaan = scanner.nextBoolean();
                   
